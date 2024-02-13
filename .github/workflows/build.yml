@@ -21,12 +21,14 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
     - name: Build the Docker image
-      run: docker build . --file dockerfile --tag adinath16/hello_world_git:$(date +%s)
+      run: |
+        git_hash=$(git rev-parse --short "$GITHUB_SHA")
+        docker build . --file dockerfile --tag adinath16/hello_world_git:$(git_hash)
       
     - name: Docker Push
       run: |
         if [ "${{ github.event_name }}" == "push" ]; then
-          docker push adinath16/hello_world_git:$(date +%s)
+          docker push adinath16/hello_world_git:$(git_hash)
         else
           echo "Skipping Docker Push step as it's not a push event."
         fi
