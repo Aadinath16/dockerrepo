@@ -27,6 +27,7 @@ jobs:
       
     - name: Docker Push
       run: |
+        git_hash=$(git rev-parse --short "$GITHUB_SHA")
         if [ "${{ github.event_name }}" == "push" ]; then
           docker push adinath16/hello_world_git:${git_hash}
         else
